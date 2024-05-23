@@ -25,5 +25,5 @@ $ npm install
 $ npm start
 ```
 
-Only users with Manager or Admin have the access to Admin options in the app.<br>
+Only users with Manager or Admin account type have the access to Admin options in the app.<br>
 You can set that up manually in the DB or in App.
