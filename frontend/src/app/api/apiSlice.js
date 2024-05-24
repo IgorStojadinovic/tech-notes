@@ -13,7 +13,7 @@ import {setCredentials} from "../../features/auth/authSlice.js";
  * @returns {Object} - The API slice object with configured endpoints.
  */
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'https://technotes-api-fs.onrender.com',
+    baseUrl: 'https://tech-notes-api-slum.onrender.com',
     credentials: 'include',
     prepareHeaders: (headers,{ getState }) => {
         const token = getState().auth.token
