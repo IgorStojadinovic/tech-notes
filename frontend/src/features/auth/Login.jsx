@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice.js";
 import { useLoginMutation } from "./authApiSlice.js";
 import  usePersist  from "../../hooks/usePersist.js"
+import PulseLoader from "react-spinners/PulseLoader";
 
 const Login = () => {
     const userRef = useRef()
@@ -53,7 +54,7 @@ const Login = () => {
 
     const errClass = errMsg ? 'errmsg' : 'offscreen'
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <PulseLoader color={"#FFF"}/>
 
     const content = (
         <section className='public'>
