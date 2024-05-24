@@ -11,12 +11,14 @@ import authReducer from "../features/auth/authSlice.js";
  * @param {boolean} options.devTools - Flag indicating whether to enable the store's dev tools.
  * @returns {Object} - The configured store object.
  */
+
+
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]:apiSlice.reducer,
         auth: authReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true
+    devTools: false // set true for production
 })
 setupListeners(store.dispatch)
