@@ -1,12 +1,17 @@
-import { FaPen } from "react-icons/fa";
+import { FaPen } from "react-icons/fa"
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { selectNoteById } from './notesApiSlice'
-
+import { useGetNotesQuery } from "./notesApiSlice.js"
+import { memo } from 'react'
 
 const Note = ({ noteId }) => {
 
-    const note = useSelector(state => selectNoteById(state, noteId));
+    //const note = useSelector(state => selectNoteById(state, noteId));
+    const  { note } = useGetNotesQuery('notesList' , {
+        selectFromResult: ({data}) => ({
+                note: data?.entities[noteId]
+        })
+    })
+
     const navigate = useNavigate()
 
     if (note ) {
@@ -42,4 +47,7 @@ const Note = ({ noteId }) => {
 
     } else return null
 }
-export default Note
+
+//Rerended if there are changes in the data
+const memoizedNote = memo(Note)
+export default memoizedNote
