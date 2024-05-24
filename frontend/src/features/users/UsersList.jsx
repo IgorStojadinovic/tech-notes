@@ -1,5 +1,6 @@
 import { useGetUsersQuery } from "./usersApiSlice.js";
 import User from "./User.jsx"
+import PulseLoader from "react-spinners/PulseLoader";
 
 const UsersList = () => {
     const {
@@ -8,7 +9,7 @@ const UsersList = () => {
         pollInterval:60000,refetchOnFocus: true,refetchOnMountOrArgChange: true})
     let content
 
-    if (isLoading) content = <p>Loading...</p>
+    if (isLoading) content = <PulseLoader color={"#FFF"}/>
 
     if (isError) {
 
