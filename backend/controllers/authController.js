@@ -74,7 +74,7 @@ const refresh = (req, res) => {
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        asyncHandler(async (err, decoded) => {
+        (async (err, decoded) => {
             if (err) return res.status(403).json({message: 'Forbidden'})
 
             const foundUser = await User.findOne({username: decoded.username})
@@ -92,8 +92,8 @@ const refresh = (req, res) => {
                 {expiresIn: '1m'} // in production set to 10~15 min
             )
             res.json({accessToken})
-        })
-    )
+        }
+        ))
 }
 
 
