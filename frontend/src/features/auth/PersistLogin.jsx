@@ -1,83 +1,77 @@
-import { Outlet, Link , useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState  } from "react";
-import { useRefreshMutation} from "./authApiSlice.js";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useRefreshMutation } from "./authApiSlice.js";
 import usePersist from "../../hooks/usePersist.js";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./authSlice.js";
 import PulseLoader from "react-spinners/PulseLoader";
 
 const PersistLogin = () => {
-    const [persist] = usePersist()
-    const navigate = useNavigate()
-    const token = useSelector(selectCurrentToken)
+  const [persist] = usePersist();
+  const navigate = useNavigate();
+  const token = useSelector(selectCurrentToken);
 
-    const effectRan = useRef(false)
+  const effectRan = useRef(false);
 
-    const [trueSuccess,setTrueSuccess] = useState(false)
+  const [trueSuccess, setTrueSuccess] = useState(false);
 
-    const [refresh, {
-        isUninitialized,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    }] = useRefreshMutation()
+  const [refresh, { isUninitialized, isLoading, isSuccess, isError, error }] =
+    useRefreshMutation();
 
-    useEffect(() => {
-        if (effectRan.current === true || process.env.NODE_ENV !== 'development') { // React 18 Strict Mode
-            const verifyRefreshToken = async () => {
-                console.log('verifying refresh token')
-                try {
-                    //const response =
-                    await refresh()
-                    // const { accessToken } = response.data
-                    setTrueSuccess(true)
-                } catch (err) {
-                    console.error(err)
-                }
+  useEffect(() => {
+    if (effectRan.current === true || process.env.NODE_ENV !== "development") {
+      // React 18 Strict Mode
+      const verifyRefreshToken = async () => {
+        console.log("verifying refresh token");
+        try {
+          const response = await refresh();
 
-            }
-            //If you refresh the page state is wipedout, and weed need to check token
-            if (!token && persist) verifyRefreshToken()
+          const { accessToken } = response.data;
+          if (accessToken) {
+            setTrueSuccess(true);
+          }
+        } catch (err) {
+          console.error(err);
         }
-        return () => effectRan.current = true
-    },[])
-
-    let content
-    if (!persist) { // persist: no
-        console.log('no persist')
-        content = <Outlet/>
-    } else if ( isLoading ) { // persist: yes, token: no
-        console.log('loading')
-        content = <PulseLoader color={"#FFF"}/>
-    } else if ( isError ) { // persist: yes , token: no
-        console.log('error, redirecting to login')
-
-       content = (
-           <>
-            <p> {error?.data?.message} </p>
-            <p>
-
-                <Link to="/login">Please login again</Link>
-            </p>
-           </>
-        )
-
-
-    } else if (isSuccess && trueSuccess) {  // persist: yes, toke: yes
-        console.log('success')
-        content = <Outlet/>
-    } else if ( token && isUninitialized ) { // persist: yes, token: yes
-        console.log('token and uninit')
-        console.log(isUninitialized)
-        content = <Outlet/>
-
+      };
+      //If you refresh the page state is wipedout, and weed need to check token
+      if (!token && persist) verifyRefreshToken();
     }
+    return () => (effectRan.current = true);
+  }, []);
 
+  let content;
+  if (!persist) {
+    // persist: no
+    console.log("no persist");
+    content = <Outlet />;
+  } else if (isLoading) {
+    // persist: yes, token: no
+    console.log("loading");
+    content = <PulseLoader color={"#FFF"} />;
+  } else if (isError) {
+    // persist: yes , token: no
+    console.log("error, redirecting to login");
 
+    content = (
+      <div className="flex justify-center items-center h-screen">
+        <p> {error?.data?.message} </p>
+        <p>
+          <Link to="/">Please login again</Link>
+        </p>
+      </div>
+    );
+  } else if (isSuccess && trueSuccess) {
+    // persist: yes, toke: yes
+    console.log("success");
+    content = <Outlet />;
+  } else if (token && isUninitialized) {
+    // persist: yes, token: yes
+    console.log("token and uninit");
+    console.log(isUninitialized);
+    content = <Outlet />;
+  }
 
-    return (
-        content
-    )
-}
-export default PersistLogin
+  return content;
+};
+export default PersistLogin;
