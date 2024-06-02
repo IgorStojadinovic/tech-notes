@@ -17,9 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <a
           href="https://github.com/IgorStojadinovic/tech-notes"
           target="_blank"
-          className="absolute bottom-0 right-0"
+          className="absolute bottom-0 right-0 p-5 text-greyish-blue transition-all duration-300 text-4xl hover:text-5xl hover:text-red-main"
         >
-          <FaGithub size={40} />
+          <FaGithub />
         </a>
 
         <Routes>
