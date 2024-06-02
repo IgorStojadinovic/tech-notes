@@ -1,44 +1,46 @@
 import { FaPen } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom'
-import { useGetUsersQuery} from "./usersApiSlice.js";
+import { useNavigate } from "react-router-dom";
+import { useGetUsersQuery } from "./usersApiSlice.js";
 import { memo } from "react";
+import useAuth from "../../hooks/useAuth.js";
 
-// eslint-disable-next-line react/prop-types
 const User = ({ userId }) => {
-    //const user = useSelector(state => selectUserById(state, userId))
-    const { user }= useGetUsersQuery('usersList',{
-        selectFromResult: ({data}) => ({
-            user: data?.entities[userId]
-        })
-    })
+  //const user = useSelector(state => selectUserById(state, userId))
+  const { user } = useGetUsersQuery("usersList", {
+    selectFromResult: ({ data }) => ({
+      user: data?.entities[userId],
+    }),
+  });
+  const { username, isManager, isAdmin } = useAuth();
 
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  if (user) {
+    const handleEdit = () => navigate(`/dashboard/users/${userId}`);
 
-    if (user) {
-        const handleEdit = () => navigate(`/dashboard/users/${userId}`)
+    const userRolesString = user.roles.toString().replaceAll(",", ", ");
 
-        const userRolesString = user.roles.toString().replaceAll(',', ', ')
-
-        const cellStatus = user.active ? '' : 'table__cell--inactive'
-
-        return (
-            <tr className="table__row user">
-                <td className={`table__cell ${cellStatus}`}>{user.username}</td>
-                <td className={`table__cell ${cellStatus}`}>{userRolesString}</td>
-                <td className={`table__cell ${cellStatus}`}>
-                    <button
-                        className="icon-button table__button"
-                        onClick={handleEdit}
-                    >
-                        <FaPen />
-
-                    </button>
-                </td>
-            </tr>
-        )
-
-    } else return null
-}
-const memoizedUser = memo(User)
-export default User
+    return (
+      <tr className="flex justify-between text-center p-5 border">
+        <td className="flex-1">{user.username}</td>
+        <td className="flex-1">{userRolesString}</td>
+        <td className="flex-1">
+          {user.username !== "Admin" ? (
+            <button
+              className=" text-slate-600 transition-all duration-300 hover:text-slate-400"
+              onClick={handleEdit}
+            >
+              <FaPen />
+            </button>
+          ) : (
+            <button className="  text-slate-400" disabled={true}>
+              <FaPen />
+            </button>
+          )}
+        </td>
+      </tr>
+    );
+  } else return null;
+};
+const memoizedUser = memo(User);
+export default memoizedUser;
