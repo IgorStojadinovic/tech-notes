@@ -1,53 +1,61 @@
-import { FaPen } from "react-icons/fa"
-import { useNavigate } from 'react-router-dom'
-import { useGetNotesQuery } from "./notesApiSlice.js"
-import { memo } from 'react'
+import { FaPen } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useGetNotesQuery } from "./notesApiSlice.js";
+import { memo } from "react";
 
 const Note = ({ noteId }) => {
+  //const note = useSelector(state => selectNoteById(state, noteId));
+  const { note } = useGetNotesQuery("notesList", {
+    selectFromResult: ({ data }) => ({
+      note: data?.entities[noteId],
+    }),
+  });
 
-    //const note = useSelector(state => selectNoteById(state, noteId));
-    const  { note } = useGetNotesQuery('notesList' , {
-        selectFromResult: ({data}) => ({
-                note: data?.entities[noteId]
-        })
-    })
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  if (note) {
+    const created = new Date(note.createdAt).toLocaleString("en-US", {
+      day: "numeric",
+      month: "long",
+      hour: "2-digit",
+      minute: "numeric",
+    });
 
-    if (note ) {
-        const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', hour:'2-digit', minute:'numeric' })
+    const updated = new Date(note.updatedAt).toLocaleString("en-US", {
+      day: "numeric",
+      month: "long",
+      hour: "2-digit",
+      minute: "numeric",
+    });
 
-        const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long' ,hour:'2-digit', minute:'numeric'})
+    const handleEdit = () => navigate(`/dashboard/notes/${noteId}`);
+    const truncatedTitle =
+      note.title.length > 10 ? note.title.substring(0, 20) + "..." : note.title;
 
-        const handleEdit = () => navigate(`/dashboard/notes/${noteId}`)
+    return (
+      <tr className="flex justify-between text-center p-5">
+        <td className="flex-1 ">
+          {note.completed ? (
+            <span className="text-green-500">Completed</span>
+          ) : (
+            <span>Open</span>
+          )}
+        </td>
+        <td className="flex-1">{created}</td>
+        <td className="flex-1">{updated}</td>
+        <td className="flex-1">{truncatedTitle}</td>
+        <td className="flex-1">{note.username}</td>
 
-        return (
-            <tr className="table__row">
-                <td className="table__cell note__status">
-                    {note.completed
-                        ? <span className="note__status--completed">Completed</span>
-                        : <span className="note__status--open">Open</span>
-                    }
-                </td>
-                <td className="table__cell note__created">{created}</td>
-                <td className="table__cell note__updated">{updated}</td>
-                <td className="table__cell note__title">{note.title}</td>
-                <td className="table__cell note__username">{note.username}</td>
+        <td className="flex-1">
+          <button className="" onClick={handleEdit}>
+            <FaPen className=" text-slate-600 transition-all duration-300 hover:text-slate-400" />
+          </button>
+        </td>
+      </tr>
+    );
+  } else return null;
+};
 
-                <td className="table__cell">
-                    <button
-                        className="icon-button table__button"
-                        onClick={handleEdit}
-                    >
-                        <FaPen />
-                    </button>
-                </td>
-            </tr>
-        )
-
-    } else return null
-}
-
-//Rerended if there are changes in the data
-const memoizedNote = memo(Note)
-export default memoizedNote
+//Render if there are changes in the data
+const memoizedNote = memo(Note);
+export default memoizedNote;
