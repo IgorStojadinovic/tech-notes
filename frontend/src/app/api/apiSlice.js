@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {setCredentials} from "../../features/auth/authSlice.js";
 
 /**
@@ -14,31 +14,32 @@ import {setCredentials} from "../../features/auth/authSlice.js";
  */
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://tech-notes-api-slum.onrender.com',
+    //dev baseUrl: 'http://localhost:3500',
     credentials: 'include',
-    prepareHeaders: (headers,{ getState }) => {
+    prepareHeaders: (headers, {getState}) => {
         const token = getState().auth.token
 
         if (token) {
-            headers.set('authorization',`Bearer ${token}`)
+            headers.set('authorization', `Bearer ${token}`)
         }
 
         return headers
     }
 })
 
-const baseQueryWithReauth = async  (args,api,extraOptions) => {
+const baseQueryWithReauth = async (args, api, extraOptions) => {
     // console.log(args) // request url, method, body
     // console.log(api) // signal, dispatch, getState()
     // console.log(extraOptions) // custom like {short: true}
 
-    let result = await baseQuery(args,api, extraOptions)
+    let result = await baseQuery(args, api, extraOptions)
 
     // If you want, handle other status too
-    if (result?.error?.status === 403){
+    if (result?.error?.status === 403) {
         console.log('sending refresh token')
 
         //Send refresh token to get new access token
-        const refreshResult = await baseQuery('/auth/refresh', api,extraOptions)
+        const refreshResult = await baseQuery('/auth/refresh', api, extraOptions)
 
         if (refreshResult?.data) {
 
@@ -46,7 +47,7 @@ const baseQueryWithReauth = async  (args,api,extraOptions) => {
             api.dispatch(setCredentials({...refreshResult.data}))
 
             // retry original query with new access token
-            result = await  baseQuery(args,api, extraOptions)
+            result = await baseQuery(args, api, extraOptions)
         } else {
 
             if (refreshResult?.error?.stats === 403) {
@@ -63,8 +64,6 @@ const baseQueryWithReauth = async  (args,api,extraOptions) => {
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
-    tagTypes:['Note','Users'],
-    endpoints: builder => ({
-
-    })
+    tagTypes: ['Note', 'Users'],
+    endpoints: builder => ({})
 })

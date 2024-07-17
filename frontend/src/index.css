@@ -44,7 +44,6 @@
 }
 
 
-
 .icon-button:hover,
 .icon-button:focus-visible {
     transform: scale(1.2);
@@ -58,7 +57,7 @@
 
 body {
     min-height: 100vh;
-    background-color: #10141E;
+    background-color: #E5E5E5;
     color: white;
 }
 
@@ -150,7 +149,7 @@ a {
     position: sticky;
     bottom: 0;
     z-index: 1;
-    background-color: #161D2F ;
+
     padding: 0.5em;
     border-top: 1px solid var(--BORDER-COLOR);
     display: flex;
