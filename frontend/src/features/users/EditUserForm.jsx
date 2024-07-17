@@ -217,7 +217,6 @@ const EditUserForm = ({user}) => {
                                 Assigned roles
                             </label>
                             <select
-                                className="accent-teal	"
                                 id="roles"
                                 name="roles"
                                 className={clsx(
