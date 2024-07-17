@@ -34,12 +34,12 @@ const DashLayout = () => {
                     </Link>
                     <div className="flex flex-col gap-4 mt-10 justify-end  text-sm text-grey-blue font-semibold">
 
-                        <Link to="/dashboard/"
+                        <Link to="/dashboard"
                               className={clsx(" ", {
-                                      "flex items-center rounded-2xl gap-4   transition-all duration-200 ease-in-out bg-white py-2": pathname === "/dashboard/"
+                                      "flex items-center rounded-2xl gap-4   transition-all duration-200 ease-in-out bg-white py-2": pathname === "/dashboard"
                                   },
                                   {
-                                      "flex items-center rounded-2xl gap-4   transition-all duration-200 ease-in-out hover:bg-white py-2": pathname !== "/dashboard/"
+                                      "flex items-center rounded-2xl gap-4   transition-all duration-200 ease-in-out hover:bg-white py-2": pathname !== "/dashboard"
                                   })}
                         >
 
