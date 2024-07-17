@@ -30,6 +30,6 @@ Admin Login
 Username: Admin
 Password: Admin
 ```
-
+Sometimes login takes a while, its free plan hosting on https://render.com/<br>
 Only users with Manager or Admin role have the access to Admin options in the app.<br>
 You can set that up manually in the DB or in App.
