@@ -12,8 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
     const userRef = useRef();
     const errRef = useRef();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("Admin");
+    const [password, setPassword] = useState("Admin");
     const [errMsg, setErrMsg] = useState("");
     const [persist, setPersist] = usePersist();
     const navigate = useNavigate();
